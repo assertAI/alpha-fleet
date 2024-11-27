@@ -43,6 +43,7 @@ Group=$USER
 WantedBy=multi-user.target" | sudo tee $SERVICE_FILE > /dev/null
 
 # Reload systemd, enable, and start the service with sudo
+echo "Setting up service..."
 sudo systemctl daemon-reload
 sudo systemctl enable alpha-fleet-manager.service
 sudo systemctl start alpha-fleet-manager.service
