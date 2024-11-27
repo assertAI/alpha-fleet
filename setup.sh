@@ -15,9 +15,9 @@ fi
 mkdir -p /home/$USER/Documents/AlphaHB/fleetManager
 
 # Create the txt file with the necessary details
-echo "Project ID: $PROJECT_ID" > /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
-echo "Warehouse ID: $WAREHOUSE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
-echo "Device ID: $DEVICE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
+echo "PROJECT_ID=$PROJECT_ID" > /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
+echo "WAREHOUSE_ID=$WAREHOUSE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
+echo "DEVICE_ID=$DEVICE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
 
 # Download the binary
 echo "Downloading binary..."
