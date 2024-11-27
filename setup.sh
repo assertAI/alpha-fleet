@@ -21,7 +21,7 @@ echo "DEVICE_ID=$DEVICE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaD
 
 # Download the binary
 echo "Downloading binary..."
-curl -L -o /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64 https://github.com/assertAI/alpha-fleet/releases/download/v0.1.0/alpha-fleet-aarch64
+curl -L -o /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64 https://github.com/assertAI/alpha-fleet/releases/download/v0.1.1/alpha-fleet-aarch64
 
 # Give execute permissions to the binary
 chmod +x /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64
