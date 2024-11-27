@@ -26,7 +26,7 @@ curl -L -o /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64 https:
 # Give execute permissions to the binary
 chmod +x /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64
 
-# Create the systemd service file
+# Create the systemd service file with sudo
 SERVICE_FILE="/etc/systemd/system/alpha-fleet-manager.service"
 echo "[Unit]
 Description=Alpha Fleet Manager
@@ -40,11 +40,11 @@ User=$USER
 Group=$USER
 
 [Install]
-WantedBy=multi-user.target" > $SERVICE_FILE
+WantedBy=multi-user.target" | sudo tee $SERVICE_FILE > /dev/null
 
-# Reload systemd, enable, and start the service
-systemctl daemon-reload
-systemctl enable alpha-fleet-manager.service
-systemctl start alpha-fleet-manager.service
+# Reload systemd, enable, and start the service with sudo
+sudo systemctl daemon-reload
+sudo systemctl enable alpha-fleet-manager.service
+sudo systemctl start alpha-fleet-manager.service
 
 echo "Alpha Fleet Manager setup complete and running."
