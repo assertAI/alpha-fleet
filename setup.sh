@@ -11,6 +11,27 @@ if [ -z "$PROJECT_ID" ] || [ -z "$WAREHOUSE_ID" ] || [ -z "$DEVICE_ID" ]; then
     exit 1
 fi
 
+# Determine the system architecture
+ARCH=$(uname -m)
+if [ "$ARCH" == "x86_64" ]; then
+    ARCH_TYPE="amd64"
+elif [ "$ARCH" == "aarch64" ]; then
+    ARCH_TYPE="aarch64"
+else
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+fi
+
+# Fetch the latest release URL
+LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/assertAI/alpha-fleet/releases/latest | grep "browser_download_url" | grep "$ARCH_TYPE" | cut -d '"' -f 4)
+
+if [ -z "$LATEST_RELEASE_URL" ]; then
+    echo "Error: Unable to fetch the latest release URL for architecture $ARCH_TYPE."
+    exit 1
+fi
+
+echo "Latest release URL: $LATEST_RELEASE_URL"
+
 # Create necessary directories
 mkdir -p /home/$USER/Documents/AlphaHB/fleetManager
 
@@ -19,12 +40,12 @@ echo "PROJECT_ID=$PROJECT_ID" > /home/$USER/Documents/AlphaHB/fleetManager/alpha
 echo "WAREHOUSE_ID=$WAREHOUSE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
 echo "DEVICE_ID=$DEVICE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
 
-# Download the binary
-echo "Downloading binary..."
-curl -L -o /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64 https://github.com/assertAI/alpha-fleet/releases/download/v0.1.2/alpha-fleet-aarch64
+# Download the appropriate binary
+echo "Downloading binary for architecture: $ARCH_TYPE"
+curl -L -o /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet $LATEST_RELEASE_URL
 
 # Give execute permissions to the binary
-chmod +x /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64
+chmod +x /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet
 
 # Create the systemd service file with sudo
 SERVICE_FILE="/etc/systemd/system/alpha-fleet-manager.service"
@@ -33,7 +54,7 @@ Description=Alpha Fleet Manager
 After=network.target
 
 [Service]
-ExecStart=/home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet-aarch64
+ExecStart=/home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet
 WorkingDirectory=/home/$USER/Documents/AlphaHB/fleetManager
 Restart=always
 User=$USER
