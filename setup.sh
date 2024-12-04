@@ -54,7 +54,7 @@ Description=Alpha Fleet Manager
 After=network.target
 
 [Service]
-ExecStart=/home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet
+ExecStart=sudo /home/$USER/Documents/AlphaHB/fleetManager/alpha-fleet
 WorkingDirectory=/home/$USER/Documents/AlphaHB/fleetManager
 Restart=always
 User=$USER
