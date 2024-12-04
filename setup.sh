@@ -22,15 +22,18 @@ else
     exit 1
 fi
 
-# Fetch the latest release URL
-LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/assertAI/alpha-fleet/releases/latest | grep "browser_download_url" | grep "$ARCH_TYPE" | cut -d '"' -f 4)
+# Fetch the latest release information from GitHub
+RELEASE_INFO=$(curl -s https://api.github.com/repos/assertAI/alpha-fleet/releases/latest)
+LATEST_RELEASE_URL=$(echo "$RELEASE_INFO" | grep "browser_download_url" | grep "$ARCH_TYPE" | cut -d '"' -f 4)
+LATEST_VERSION=$(echo "$RELEASE_INFO" | grep '"tag_name"' | cut -d '"' -f 4)
 
-if [ -z "$LATEST_RELEASE_URL" ]; then
-    echo "Error: Unable to fetch the latest release URL for architecture $ARCH_TYPE."
+if [ -z "$LATEST_RELEASE_URL" ] || [ -z "$LATEST_VERSION" ]; then
+    echo "Error: Unable to fetch the latest release information for architecture $ARCH_TYPE."
     exit 1
 fi
 
 echo "Latest release URL: $LATEST_RELEASE_URL"
+echo "Latest version: $LATEST_VERSION"
 
 # Create necessary directories
 mkdir -p /home/$USER/Documents/AlphaHB/fleetManager
@@ -39,6 +42,9 @@ mkdir -p /home/$USER/Documents/AlphaHB/fleetManager
 echo "PROJECT_ID=$PROJECT_ID" > /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
 echo "WAREHOUSE_ID=$WAREHOUSE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
 echo "DEVICE_ID=$DEVICE_ID" >> /home/$USER/Documents/AlphaHB/fleetManager/alphaDetails.txt
+
+# Create the version.txt file with the latest version
+echo "$LATEST_VERSION" > /home/$USER/Documents/AlphaHB/fleetManager/version.txt
 
 # Download the appropriate binary
 echo "Downloading binary for architecture: $ARCH_TYPE"
